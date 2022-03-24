@@ -1,0 +1,10 @@
+import pika
+print("konek ke rabbitmq")
+# open koneksi dg blocking connection bisa juga non blocking (select connection)
+connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+channel = connection.channel()
+channel.queue_declare(queue='pages')
+# jika koneksi terputus agar pesan ketika koneksi tetap tersampaikan ke consumer maka gunakan acknowledge yaitu auto_act=true yg ditempatkan di basic_consume atau di message callback ch.basic_ack(delivery_tag=method.delivery_tag)
+channel.basic_publish(exchange='', routing_key='pages', body='mastering rabbitmq, this is message though rabbitmq')
+print("* Done send")
+connection.close()
